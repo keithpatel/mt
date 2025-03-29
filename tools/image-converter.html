@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Image Converter</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <div id="header"></div>
+
+    <div class="tool-container">
+        <h2>🖼️ Image Converter</h2>
+        
+        <!-- File Upload -->
+        <div class="upload-area">
+            <input type="file" id="imageInput" accept="image/*">
+            <p>Drag or click to upload image</p>
+        </div>
+
+        <!-- Format Selection -->
+        <div class="options">
+            <select id="formatSelect">
+                <option value="png">PNG</option>
+                <option value="jpeg">JPEG</option>
+                <option value="webp">WebP</option>
+            </select>
+            <button onclick="convertImage()">Convert</button>
+        </div>
+
+        <!-- Preview -->
+        <div class="preview">
+            <img id="previewImage">
+            <a id="downloadLink" style="display:none">Download</a>
+        </div>
+    </div>
+
+    <div id="footer"></div>
+
+    <script src="../load-components.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/converseen@1.0.0/converseen.min.js"></script>
+    <script>
+    let currentImage = null;
+
+    // Handle file selection
+    document.getElementById('imageInput').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if(file) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                document.getElementById('previewImage').src = event.target.result;
+                currentImage = file;
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // Conversion function
+    function convertImage() {
+        if(!currentImage) return alert('Please upload an image first!');
+        
+        const format = document.getElementById('formatSelect').value;
+        const converter = new Converseen();
+        
+        converter.convert(currentImage, format)
+            .then(convertedFile => {
+                const url = URL.createObjectURL(convertedFile);
+                const link = document.getElementById('downloadLink');
+                link.href = url;
+                link.download = `converted-image.${format}`;
+                link.style.display = 'block';
+                link.click();
+            });
+    }
+    </script>
+</body>
+</html>

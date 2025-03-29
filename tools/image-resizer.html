@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Image Resizer</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <div id="header"></div>
+
+    <div class="tool-container">
+        <h2>📏 Image Resizer</h2>
+        
+        <input type="file" id="imageInput" accept="image/*">
+        <div class="size-controls">
+            <input type="number" id="width" placeholder="Width">
+            <input type="number" id="height" placeholder="Height">
+            <button onclick="resizeImage()">Resize</button>
+        </div>
+        <canvas id="previewCanvas"></canvas>
+        <a id="downloadResized" style="display:none">Download</a>
+    </div>
+
+    <div id="footer"></div>
+
+    <script src="../load-components.js"></script>
+    <script>
+    function resizeImage() {
+        const file = document.getElementById('imageInput').files[0];
+        const width = parseInt(document.getElementById('width').value);
+        const height = parseInt(document.getElementById('height').value);
+        
+        if(!file || !width || !height) return alert('Please fill all fields!');
+
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            const img = new Image();
+            img.onload = function() {
+                const canvas = document.getElementById('previewCanvas');
+                const ctx = canvas.getContext('2d');
+                canvas.width = width;
+                canvas.height = height;
+                ctx.drawImage(img, 0, 0, width, height);
+                
+                const link = document.getElementById('downloadResized');
+                link.href = canvas.toDataURL(file.type);
+                link.download = `resized-${width}x${height}.${file.type.split('/')[1]}`;
+                link.style.display = 'block';
+            };
+            img.src = event.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
+    </script>
+</body>
+</html>

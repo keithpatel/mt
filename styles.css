@@ -1,0 +1,36 @@
+body { font-family: Arial; margin: 0; }
+
+/* Tool Grid */
+.tool-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    padding: 20px;
+}
+
+.tool-card {
+    background: #f0f0f0;
+    padding: 20px;
+    text-align: center;
+    text-decoration: none;
+    color: black;
+    border-radius: 10px;
+}
+
+/* Header/Footer */
+.header {
+    background: #007bff;
+    color: white;
+    padding: 20px;
+}
+
+.footer {
+    background: #333;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
